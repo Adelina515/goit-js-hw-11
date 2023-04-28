@@ -12,7 +12,7 @@ body {
   line-height: 1.5;
 }
 
-#search-box {
+#search-form {
   font: inherit;
   padding: 8px;
   max-width: 320px;
