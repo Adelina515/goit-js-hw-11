@@ -4,6 +4,14 @@ import debounce from "lodash.debounce";
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import axios from 'axios';
 
+
+
+
+
+const refs = {
+    form: document.getElementById("search-form")
+}
+
 // const DEBOUNCE_DELAY = 300;
 // const refs = {
 //     input: document.getElementById('search-box'),
