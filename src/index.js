@@ -1,6 +1,8 @@
 import './css/styles.css';
 import { fetchImg } from "./fetchImg.js";
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css"; 
 
 
 
@@ -13,6 +15,12 @@ const refs = {
 refs.form.addEventListener('submit', handleSubmit);
 refs.loadMore.addEventListener('click', handleLoadMore);
 
+    const lightbox = new SimpleLightbox('.gallery .photo-card__link', {
+        captions: true,
+        captionsData: "alt",
+        captionPosition: "bottom",
+        captionDelay: 250,
+});
  
 
 async function handleLoadMore() {
@@ -54,7 +62,9 @@ async function handleSubmit(ev) {
             refs.gallery.innerHTML = '';
         } 
             Notify.success(`Hooray! We found ${data.totalHits} imades.`);
-        renderMarkup(data.hits)
+            renderMarkup(data.hits);
+            lightbox.refresh();
+
          if (data.totalHits < 40) {
             refs.loadMore.disabled = false;
         }
