@@ -16,13 +16,14 @@ async function handleLoadMore() {
     refs.loadMore.disabled = true;
     refs.loadMore.classList.add('visually-hidden')
     try {
-        return await handleSubmit();
+        await handleSubmit();
         if (data.hits.length === data.totalHits) {
             Notify.warning("We're sorry, but you've reached the end of search results.")
 
         }
         refs.loadMore.disabled = false;
-        refs.loadMore.classList.remove('visually-hidden')
+        refs.loadMore.classList.remove('visually-hidden');
+        return;
     } catch (err){
         console.log(err)
     }   
