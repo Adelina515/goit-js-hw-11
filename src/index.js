@@ -20,8 +20,9 @@ refs.loadMore.addEventListener('click', handleLoadMore);
         captionsData: "alt",
         captionPosition: "bottom",
         captionDelay: 250,
-});
- 
+    });
+
+let currentPage = 1;
 
 async function handleLoadMore(ev) {
      ev.preventDefault();
@@ -29,8 +30,8 @@ async function handleLoadMore(ev) {
     refs.loadMore.classList.add('visually-hidden')
     try {
         const inputValue = refs.form.elements.searchQuery.value;
-        const pageAdd = inctementPage();
-        const { data } = await fetchImg(inputValue, pageAdd, 40); 
+        currentPage += 1;
+        const { data } = await fetchImg(inputValue, currentPage, 40); 
         Notify.success(`Hooray! We found ${data.totalHits} imades.`);
         renderMarkup(data.hits)
           if (data.totalHits < 1) {
@@ -46,9 +47,7 @@ async function handleLoadMore(ev) {
         console.log(err)
     }   
 }
-function inctementPage(page) {
-    page += 1;
-}
+
 async function handleSubmit(ev) {
     ev.preventDefault();
     refs.gallery.innerHTML = '';
