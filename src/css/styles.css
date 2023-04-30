@@ -73,7 +73,7 @@ button:hover {
   margin-right: 15px;
 }
 
- .visually-hidden {
+ .hidden {
    position: absolute;
    width: 1px;
    height: 1px;
@@ -85,6 +85,7 @@ button:hover {
    clip: rect(0 0 0 0);
    overflow: hidden;
  }
+
  .load-more{
   margin-left: 45%;
  }

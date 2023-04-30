@@ -31,17 +31,21 @@ async function handleLoadMore(ev) {
     try {
         const inputValue = refs.form.elements.searchQuery.value;
         currentPage += 1;
-        const { data } = await fetchImg(inputValue, currentPage, 40); 
+        const { data } = await fetchImg(inputValue, currentPage); 
         Notify.success(`Hooray! We found ${data.totalHits} imades.`);
         renderMarkup(data.hits)
+         lightbox.refresh();
           if (data.totalHits < 1) {
             Notify.warning("We're sorry, but you've reached the end of search results.")
-            refs.loadMore.disabled = false;
-        }else if (data.totalHits < 40) {
-            refs.loadMore.disabled = false;
+             refs.loadMore.disabled = true;
+            refs.loadMore.classList.add('hidden')
+        }
+        if (data.totalHits < 40) {
+             refs.loadMore.disabled = true;
+             refs.loadMore.classList.add('hidden')
         }
         refs.loadMore.disabled = false;
-        refs.loadMore.classList.remove('visually-hidden');
+        refs.loadMore.classList.remove('hidden');
         return;
     } catch (err){
         console.log(err)
@@ -50,25 +54,27 @@ async function handleLoadMore(ev) {
 
 async function handleSubmit(ev) {
     ev.preventDefault();
+    currentPage = 1;
     refs.gallery.innerHTML = '';
     const inputValue = ev.currentTarget.searchQuery.value;
     try {
-        const { data } = await fetchImg(inputValue, 1, 40); 
+        const { data } = await fetchImg(inputValue, currentPage); 
         if (data.hits.length === 0) {
             Notify.failure("Sorry, there are no images matching your search query. Please try again.");
              refs.gallery.innerHTML = '';
         } else if (inputValue === ''){
             Notify.failure("Please input  query.");
             refs.gallery.innerHTML = '';
-        } 
+        }
             Notify.success(`Hooray! We found ${data.totalHits} imades.`);
             renderMarkup(data.hits);
             lightbox.refresh();
-
          if (data.totalHits < 40) {
-            refs.loadMore.disabled = false;
+            refs.loadMore.disabled = true;
+            refs.loadMore.classList.add('hidden')
         }
-            refs.loadMore.classList.remove('visually-hidden')
+           
+            refs.loadMore.classList.remove('hidden')
             refs.loadMore.disabled = false;
         
         console.log(data)
