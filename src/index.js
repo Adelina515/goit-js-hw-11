@@ -28,7 +28,7 @@ async function handleLoadMore(ev) {
     refs.loadMore.disabled = true;
     refs.loadMore.classList.add('visually-hidden')
     try {
-        const inputValue = refs.form.value;
+        const inputValue = refs.form.elements.searchQuery.value;
         const pageAdd = inctementPage();
         const { data } = await fetchImg(inputValue, pageAdd, 40); 
         Notify.success(`Hooray! We found ${data.totalHits} imades.`);
