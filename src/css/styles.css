@@ -29,6 +29,9 @@ button:focus,
 button:hover {
   background-color: rgb(249, 107, 131);
 }
+button:disabled{
+  background-color: #c4bfbf;
+}
 .gallery {
   display: flex;
   flex-wrap: wrap;

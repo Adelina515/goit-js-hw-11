@@ -32,20 +32,21 @@ async function handleLoadMore(ev) {
         const inputValue = refs.form.elements.searchQuery.value;
         currentPage += 1;
         const { data } = await fetchImg(inputValue, currentPage); 
-        Notify.success(`Hooray! We found ${data.totalHits} imades.`);
         renderMarkup(data.hits)
-         lightbox.refresh();
+        lightbox.refresh();
+         refs.loadMore.disabled = false;
+         refs.loadMore.classList.remove('hidden');
           if (data.totalHits < 1) {
             Notify.warning("We're sorry, but you've reached the end of search results.")
              refs.loadMore.disabled = true;
-            refs.loadMore.classList.add('hidden')
+              refs.loadMore.classList.add('hidden')
+              console.log(data.totalHits)
         }
-        if (data.totalHits < 40) {
+        if (data.hits.length < 40) {
              refs.loadMore.disabled = true;
              refs.loadMore.classList.add('hidden')
         }
-        refs.loadMore.disabled = false;
-        refs.loadMore.classList.remove('hidden');
+       
         return;
     } catch (err){
         console.log(err)
@@ -65,17 +66,19 @@ async function handleSubmit(ev) {
         } else if (inputValue === ''){
             Notify.failure("Please input  query.");
             refs.gallery.innerHTML = '';
+            refs.loadMore.classList.add('hidden')
         }
             Notify.success(`Hooray! We found ${data.totalHits} imades.`);
             renderMarkup(data.hits);
-            lightbox.refresh();
-         if (data.totalHits < 40) {
+        lightbox.refresh();
+           refs.loadMore.classList.remove('hidden')
+            refs.loadMore.disabled = false;
+         if (data.hits.length < 40) {
             refs.loadMore.disabled = true;
             refs.loadMore.classList.add('hidden')
         }
            
-            refs.loadMore.classList.remove('hidden')
-            refs.loadMore.disabled = false;
+         
         
         console.log(data)
     }
