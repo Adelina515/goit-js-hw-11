@@ -11,15 +11,24 @@ const refs = {
 }
 
 refs.form.addEventListener('submit', handleSubmit);
-refs.loadMore.addEventListener('click', handleLoadMore)
+refs.loadMore.addEventListener('click', handleLoadMore);
+
+ 
+
 async function handleLoadMore() {
     refs.loadMore.disabled = true;
     refs.loadMore.classList.add('visually-hidden')
     try {
-        await handleSubmit();
-        if (data.hits.length === data.totalHits) {
+        const inputValue = refs.form.value;
+        const pageAdd = inctementPage();
+        const { data } = await fetchImg(inputValue, pageAdd, 40); 
+        Notify.success(`Hooray! We found ${data.totalHits} imades.`);
+        renderMarkup(data.hits)
+          if (data.totalHits < 1) {
             Notify.warning("We're sorry, but you've reached the end of search results.")
-
+            refs.loadMore.disabled = false;
+        }else if (data.totalHits < 40) {
+            refs.loadMore.disabled = false;
         }
         refs.loadMore.disabled = false;
         refs.loadMore.classList.remove('visually-hidden');
@@ -28,26 +37,34 @@ async function handleLoadMore() {
         console.log(err)
     }   
 }
+function inctementPage(page) {
+    page += 1;
+}
 async function handleSubmit(ev) {
     ev.preventDefault();
     refs.gallery.innerHTML = '';
-     const inputValue = ev.currentTarget.searchQuery.value;
+    const inputValue = ev.currentTarget.searchQuery.value;
     try {
         const { data } = await fetchImg(inputValue, 1, 40); 
-        resetPage();
         if (data.hits.length === 0) {
-            throw new Error ("No data!")
-        } else {
+            Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+             refs.gallery.innerHTML = '';
+        } else if (inputValue === ''){
+            Notify.failure("Please input  query.");
+            refs.gallery.innerHTML = '';
+        } 
             Notify.success(`Hooray! We found ${data.totalHits} imades.`);
-            renderMarkup(data.hits)
-            refs.loadMore.classList.remove('visually-hidden')
+        renderMarkup(data.hits)
+         if (data.totalHits < 40) {
             refs.loadMore.disabled = false;
         }
+            refs.loadMore.classList.remove('visually-hidden')
+            refs.loadMore.disabled = false;
+        
         console.log(data)
     }
     catch (err) {
-        Notify.failure("Sorry, there are no images matching your search query. Please try again.");
-        refs.gallery.innerHTML = '';
+      console.log(err)
     }   
 }
 
