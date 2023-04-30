@@ -85,3 +85,6 @@ button:hover {
    clip: rect(0 0 0 0);
    overflow: hidden;
  }
+ .load-more{
+  margin-left: 45%;
+ }

@@ -23,7 +23,8 @@ refs.loadMore.addEventListener('click', handleLoadMore);
 });
  
 
-async function handleLoadMore() {
+async function handleLoadMore(ev) {
+     ev.preventDefault();
     refs.loadMore.disabled = true;
     refs.loadMore.classList.add('visually-hidden')
     try {
