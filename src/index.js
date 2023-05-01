@@ -47,7 +47,7 @@ async function handleLoadMore(ev) {
              refs.loadMore.disabled = true;
              refs.loadMore.classList.add('hidden')
         }
-        if (currentPage * 40 >= data.totalHits) {
+        if ((data.totalHits / 40) === currentPage) {
             Notify.warning("We're sorry, but you've reached the end of search results.")
              refs.loadMore.disabled = true;
              refs.loadMore.classList.add('hidden')
