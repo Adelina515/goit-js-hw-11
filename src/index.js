@@ -43,6 +43,12 @@ async function handleLoadMore(ev) {
               console.log(data.totalHits)
         }
         if (data.hits.length < 40) {
+            Notify.warning("We're sorry, but you've reached the end of search results.")
+             refs.loadMore.disabled = true;
+             refs.loadMore.classList.add('hidden')
+        }
+        if (currentPage * 40 >= data.totalHits) {
+            Notify.warning("We're sorry, but you've reached the end of search results.")
              refs.loadMore.disabled = true;
              refs.loadMore.classList.add('hidden')
         }
