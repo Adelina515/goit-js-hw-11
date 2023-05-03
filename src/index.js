@@ -29,7 +29,7 @@ async function handleLoadMore(ev) {
     refs.loadMore.disabled = true;
     refs.loadMore.classList.add('visually-hidden')
     try {
-        const inputValue = refs.form.elements.searchQuery.value;
+        const inputValue = refs.form.elements.searchQuery.value.trim();
         currentPage += 1;
         const { data } = await fetchImg(inputValue, currentPage); 
         renderMarkup(data.hits)
@@ -41,19 +41,20 @@ async function handleLoadMore(ev) {
              refs.loadMore.disabled = true;
               refs.loadMore.classList.add('hidden')
               console.log(data.totalHits)
+              return;
         }
-        if (data.hits.length < 40) {
-            Notify.warning("We're sorry, but you've reached the end of search results.")
-             refs.loadMore.disabled = true;
-             refs.loadMore.classList.add('hidden')
-        }
+        // if (data.hits.length < 40) {
+        //     Notify.warning("We're sorry, but you've reached the end of search results.")
+        //      refs.loadMore.disabled = true;
+        //      refs.loadMore.classList.add('hidden')
+        // }
         if (currentPage * 40 >= data.totalHits) {
             Notify.warning("We're sorry, but you've reached the end of search results.")
              refs.loadMore.disabled = true;
-             refs.loadMore.classList.add('hidden')
+            refs.loadMore.classList.add('hidden')
+            return;
         }
        
-        return;
     } catch (err){
         console.log(err)
     }   
@@ -63,26 +64,36 @@ async function handleSubmit(ev) {
     ev.preventDefault();
     currentPage = 1;
     refs.gallery.innerHTML = '';
-    const inputValue = ev.currentTarget.searchQuery.value;
+    const inputValue = ev.currentTarget.searchQuery.value.trim();
+    if (!inputValue) {
+            Notify.failure("Please input  query.");
+            refs.gallery.innerHTML = '';
+            refs.loadMore.classList.add('hidden')
+            return;
+    }
     try {
         const { data } = await fetchImg(inputValue, currentPage); 
         if (data.hits.length === 0) {
             Notify.failure("Sorry, there are no images matching your search query. Please try again.");
-             refs.gallery.innerHTML = '';
-        } else if (inputValue === ''){
-            Notify.failure("Please input  query.");
             refs.gallery.innerHTML = '';
             refs.loadMore.classList.add('hidden')
-        }
+            return;
+        } else {
+              renderMarkup(data.hits);
+              lightbox.refresh();
             Notify.success(`Hooray! We found ${data.totalHits} imades.`);
-            renderMarkup(data.hits);
-        lightbox.refresh();
-           refs.loadMore.classList.remove('hidden')
             refs.loadMore.disabled = false;
-         if (data.hits.length < 40) {
+            refs.loadMore.classList.remove('hidden')
+            
+
+             if (data.hits.length < 40) {
             refs.loadMore.disabled = true;
             refs.loadMore.classList.add('hidden')
+             }
+            return ;
         }
+         
+        
            
          
         
